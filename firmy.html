@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Moje Firmy">
+<meta name="theme-color" content="#0a0a0a">
+<title>Moje Firmy</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230a0a0a'/><text x='90' y='118' font-family='Georgia,serif' font-size='80' font-weight='400' text-anchor='middle' fill='%23d4af37'>F</text></svg>">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --surface: #ffffff;
+    --surface-2: #f4f3ee;
+    --ink: #1a1a1a;
+    --ink-soft: #5a5a55;
+    --ink-muted: #8a8a82;
+    --line: #e8e6df;
+    --accent: #8b6f47;
+    --accent-soft: #f0e9dc;
+    --danger: #b04a3a;
+    --success: #4a7c59;
+    --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --mono: 'SF Mono', Menlo, monospace;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+    --radius: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f0e0c;
+      --surface: #1a1816;
+      --surface-2: #242220;
+      --ink: #f0ede4;
+      --ink-soft: #b8b4a8;
+      --ink-muted: #6e6a60;
+      --line: #2e2b27;
+      --accent: #d4af37;
+      --accent-soft: #2a241a;
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+    }
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.5;
+    overscroll-behavior: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  body {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+
+  /* Header */
+  header {
+    padding: 28px 0 24px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .brand em {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .count {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .search {
+    flex: 1;
+    position: relative;
+  }
+
+  .search input {
+    width: 100%;
+    padding: 14px 16px 14px 44px;
+    font-size: 16px;
+    font-family: var(--sans);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .search svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-muted);
+    pointer-events: none;
+  }
+
+  .btn {
+    padding: 14px 18px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-muted);
+  }
+
+  .empty .icon {
+    font-family: var(--serif);
+    font-size: 64px;
+    color: var(--accent);
+    opacity: 0.4;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .empty p {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  .empty span {
+    font-size: 14px;
+    margin-top: 8px;
+    display: block;
+  }
+
+  /* Company list */
+  .companies {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .company {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .company:active {
+    transform: scale(0.99);
+  }
+
+  .company:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .company-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .company-nip {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+
+  .company-form {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 100;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fade 0.2s ease;
+  }
+
+  .modal-backdrop.show { display: flex; }
+
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slide { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  .modal {
+    background: var(--bg);
+    width: 100%;
+    max-width: 640px;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: 24px 24px 0 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    animation: slide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .modal-handle {
+    width: 36px;
+    height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    margin: 10px auto 0;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 8px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 1;
+  }
+
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .close {
+    background: var(--surface-2);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--ink);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content { padding: 8px 20px 24px; }
+
+  /* Form */
+  .form-group { margin-bottom: 18px; }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-family: var(--sans);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-group input:focus, .form-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 70px;
+    font-family: var(--sans);
+  }
+
+  .nip-lookup {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .nip-lookup input { flex: 1; }
+
+  .nip-lookup button {
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nip-lookup button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Detail view */
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 0.15s;
+    margin: 0 -8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 6px;
+  }
+
+  .detail-row:active { background: var(--surface-2); }
+  .detail-row:last-of-type { border-bottom: none; }
+
+  .detail-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    font-weight: 600;
+    flex-shrink: 0;
+    padding-top: 2px;
+    min-width: 80px;
+  }
+
+  .detail-value {
+    font-size: 15px;
+    color: var(--ink);
+    text-align: right;
+    word-break: break-word;
+    flex: 1;
+  }
+
+  .detail-value.mono {
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+
+  .copy-hint {
+    display: block;
+    font-size: 10px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Action buttons */
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+
+  .actions .btn { flex: 1; justify-content: center; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 12px 20px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .toast.error { background: var(--danger); color: white; }
+  .toast.success { background: var(--success); color: white; }
+
+  /* Loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Bank accounts */
+  .bank-list {
+    list-style: none;
+    margin-top: 4px;
+  }
+
+  .bank-list li {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 6px 0;
+    color: var(--ink);
+  }
+
+  /* Helper links */
+  .helper-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: var(--accent-soft);
+    border-radius: 8px;
+  }
+
+  .helper-link:active { opacity: 0.7; }
+
+  /* Section divider */
+  .section-title {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 20px 0 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-title:first-of-type { border-top: none; padding-top: 0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">Moje <em>Firmy</em></div>
+    <div class="count" id="count">0 firm</div>
+  </header>
+
+  <div class="toolbar">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Szukaj firmy lub NIP...">
+    </div>
+    <button class="btn btn-primary" onclick="openAddModal()">+ Dodaj</button>
+  </div>
+
+  <div id="empty" class="empty">
+    <div class="icon">F</div>
+    <p>Brak zapisanych firm</p>
+    <span>Dodaj pierwszą firmę przyciskiem powyżej</span>
+  </div>
+
+  <div id="companies" class="companies"></div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div class="modal-backdrop" id="formModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="formTitle">Nowa firma</div>
+      <button class="close" onclick="closeFormModal()">×</button>
+    </div>
+    <div class="modal-content">
+      <div class="form-group">
+        <label>NIP</label>
+        <div class="nip-lookup">
+          <input type="text" id="f_nip" placeholder="10 cyfr" inputmode="numeric" maxlength="13">
+          <button onclick="lookupNIP()" id="lookupBtn">Pobierz dane</button>
+        </div>
+        <div style="font-size: 11px; color: var(--ink-muted); margin-top: 6px;">
+          Pobiera dane z Białej Listy MF (nazwa, adres, REGON, konta)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Nazwa firmy *</label>
+        <input type="text" id="f_name" placeholder="Pełna nazwa firmy">
+      </div>
+
+      <div class="form-group">
+        <label>Forma prawna</label>
+        <input type="text" id="f_form" placeholder="np. Sp. z o.o., S.A.">
+      </div>
+
+      <div class="form-group">
+        <label>Adres</label>
+        <textarea id="f_address" placeholder="Ulica, kod pocztowy, miasto"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>REGON</label>
+        <input type="text" id="f_regon" placeholder="9 lub 14 cyfr" inputmode="numeric">
+      </div>
+
+      <div class="form-group">
+        <label>KRS</label>
+        <input type="text" id="f_krs" placeholder="10 cyfr" inputmode="numeric">
+      </div>
+
+      <div class="form-group">
+        <label>Kapitał zakładowy</label>
+        <input type="text" id="f_capital" placeholder="np. 50 000 zł">
+      </div>
+
+      <div class="form-group">
+        <label>Numer konta</label>
+        <input type="text" id="f_bank" placeholder="26 cyfr (IBAN bez PL)" inputmode="numeric">
+      </div>
+
+      <div class="form-group">
+        <label>Notatki</label>
+        <textarea id="f_notes" placeholder="Dodatkowe informacje (e-mail, telefon, www...)"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="closeFormModal()">Anuluj</button>
+        <button class="btn btn-primary" onclick="saveCompany()">Zapisz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-backdrop" id="detailModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="d_name">Firma</div>
+      <button class="close" onclick="closeDetailModal()">×</button>
+    </div>
+    <div class="modal-content" id="detailContent">
+      <!-- filled dynamically -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ===== Storage =====
+  const STORAGE_KEY = 'moje_firmy_v1';
+  let companies = [];
+  let editingId = null;
+
+  function loadCompanies() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      companies = data ? JSON.parse(data) : [];
+    } catch(e) { companies = []; }
+  }
+
+  function saveCompanies() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
+  }
+
+  // ===== Toast =====
+  let toastTimer;
+  function toast(msg, type = '') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast show ' + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.className = 'toast ' + type, 2200);
+  }
+
+  // ===== Render =====
+  function render() {
+    const list = document.getElementById('companies');
+    const empty = document.getElementById('empty');
+    const count = document.getElementById('count');
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+
+    const filtered = companies.filter(c => {
+      if (!search) return true;
+      return (c.name || '').toLowerCase().includes(search) ||
+             (c.nip || '').replace(/\D/g,'').includes(search.replace(/\D/g,''));
+    });
+
+    count.textContent = companies.length === 1 ? '1 firma' :
+                       (companies.length >= 2 && companies.length <= 4) ? companies.length + ' firmy' :
+                       companies.length + ' firm';
+
+    if (companies.length === 0) {
+      empty.style.display = 'block';
+      list.innerHTML = '';
+      return;
+    }
+
+    empty.style.display = 'none';
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="empty"><p style="font-size:16px">Nie znaleziono</p></div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(c => `
+      <div class="company" onclick="showDetail('${c.id}')">
+        <div class="company-name">${escapeHtml(c.name || 'Bez nazwy')}</div>
+        <div class="company-nip">NIP: ${formatNIP(c.nip)}</div>
+        ${c.form ? `<span class="company-form">${escapeHtml(c.form)}</span>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+  }
+
+  function formatNIP(nip) {
+    if (!nip) return '—';
+    const clean = nip.replace(/\D/g, '');
+    if (clean.length === 10) {
+      return `${clean.slice(0,3)}-${clean.slice(3,6)}-${clean.slice(6,8)}-${clean.slice(8,10)}`;
+    }
+    return nip;
+  }
+
+  function formatBank(bank) {
+    if (!bank) return '';
+    const clean = bank.replace(/\s/g, '');
+    return clean.replace(/(.{4})/g, '$1 ').trim();
+  }
+
+  // ===== Add/Edit modal =====
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('formTitle').textContent = 'Nowa firma';
+    ['f_nip','f_name','f_form','f_address','f_regon','f_krs','f_capital','f_bank','f_notes'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('formModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openEditModal(id) {
+    const c = companies.find(x => x.id === id);
+    if (!c) return;
+    editingId = id;
+    document.getElementById('formTitle').textContent = 'Edytuj firmę';
+    document.getElementById('f_nip').value = c.nip || '';
+    document.getElementById('f_name').value = c.name || '';
+    document.getElementById('f_form').value = c.form || '';
+    document.getElementById('f_address').value = c.address || '';
+    document.getElementById('f_regon').value = c.regon || '';
+    document.getElementById('f_krs').value = c.krs || '';
+    document.getElementById('f_capital').value = c.capital || '';
+    document.getElementById('f_bank').value = c.bank || '';
+    document.getElementById('f_notes').value = c.notes || '';
+    closeDetailModal();
+    document.getElementById('formModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFormModal() {
+    document.getElementById('formModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  function saveCompany() {
+    const name = document.getElementById('f_name').value.trim();
+    if (!name) {
+      toast('Nazwa firmy jest wymagana', 'error');
+      return;
+    }
+
+    const data = {
+      id: editingId || Date.now().toString(),
+      nip: document.getElementById('f_nip').value.replace(/\D/g, ''),
+      name: name,
+      form: document.getElementById('f_form').value.trim(),
+      address: document.getElementById('f_address').value.trim(),
+      regon: document.getElementById('f_regon').value.replace(/\D/g, ''),
+      krs: document.getElementById('f_krs').value.replace(/\D/g, ''),
+      capital: document.getElementById('f_capital').value.trim(),
+      bank: document.getElementById('f_bank').value.replace(/\s/g, ''),
+      notes: document.getElementById('f_notes').value.trim(),
+      banks: editingId ? (companies.find(c => c.id === editingId)?.banks || []) : []
+    };
+
+    if (editingId) {
+      const idx = companies.findIndex(c => c.id === editingId);
+      if (idx !== -1) {
+        // preserve banks array if set from API
+        data.banks = companies[idx].banks || data.banks;
+        companies[idx] = data;
+      }
+    } else {
+      companies.unshift(data);
+    }
+
+    saveCompanies();
+    render();
+    closeFormModal();
+    toast(editingId ? 'Zapisano zmiany' : 'Dodano firmę', 'success');
+  }
+
+  function deleteCompany(id) {
+    if (!confirm('Czy na pewno usunąć tę firmę?')) return;
+    companies = companies.filter(c => c.id !== id);
+    saveCompanies();
+    render();
+    closeDetailModal();
+    toast('Usunięto firmę');
+  }
+
+  // ===== NIP Lookup (Biała Lista MF) =====
+  async function lookupNIP() {
+    const nipInput = document.getElementById('f_nip');
+    const nip = nipInput.value.replace(/\D/g, '');
+    const btn = document.getElementById('lookupBtn');
+
+    if (nip.length !== 10) {
+      toast('NIP musi mieć 10 cyfr', 'error');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>';
+
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const url = `https://wl-api.mf.gov.pl/api/search/nip/${nip}?date=${today}`;
+      const res = await fetch(url);
+
+      if (!res.ok) throw new Error('Nie znaleziono');
+
+      const json = await res.json();
+      const subject = json.result?.subject;
+
+      if (!subject) {
+        toast('Nie znaleziono firmy o tym NIP', 'error');
+        return;
+      }
+
+      // Fill form fields
+      const fullName = subject.name || '';
+      // Try to extract legal form
+      const formMatch = fullName.match(/(Sp\. z o\.o\.|S\.A\.|Sp\. k\.|Sp\.j\.|S\.K\.A\.|Sp\. komandytowa|Spółka Akcyjna|Spółka z ograniczoną odpowiedzialnością|Fundacja|Stowarzyszenie)/i);
+
+      document.getElementById('f_name').value = fullName;
+      if (formMatch) {
+        document.getElementById('f_form').value = formMatch[0];
+      }
+
+      // Address
+      const addr = [subject.workingAddress || subject.residenceAddress].filter(Boolean).join(', ');
+      if (addr) document.getElementById('f_address').value = addr;
+
+      if (subject.regon) document.getElementById('f_regon').value = subject.regon;
+      if (subject.krs) document.getElementById('f_krs').value = subject.krs;
+
+      // Bank accounts
+      if (subject.accountNumbers && subject.accountNumbers.length > 0) {
+        document.getElementById('f_bank').value = subject.accountNumbers[0];
+        // store all in temp for save
+        window._tempBanks = subject.accountNumbers;
+      }
+
+      toast('Pobrano dane z Białej Listy', 'success');
+    } catch (err) {
+      toast('Błąd pobierania. Sprawdź NIP lub połączenie', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Pobierz dane';
+    }
+  }
+
+  // ===== Detail view =====
+  function showDetail(id) {
+    const c = companies.find(x => x.id === id);
+    if (!c) return;
+
+    document.getElementById('d_name').textContent = c.name || 'Bez nazwy';
+
+    const rows = [];
+
+    rows.push(makeRow('NIP', formatNIP(c.nip), c.nip, true));
+    if (c.form) rows.push(makeRow('Forma', c.form, c.form));
+    if (c.address) rows.push(makeRow('Adres', c.address, c.address));
+    if (c.regon) rows.push(makeRow('REGON', c.regon, c.regon, true));
+    if (c.krs) rows.push(makeRow('KRS', c.krs, c.krs, true));
+    if (c.capital) rows.push(makeRow('Kapitał', c.capital, c.capital));
+    if (c.bank) rows.push(makeRow('Konto', formatBank(c.bank), c.bank, true));
+
+    // Multiple bank accounts
+    if (c.banks && c.banks.length > 1) {
+      const otherBanks = c.banks.slice(1);
+      rows.push(`<div class="section-title">Pozostałe konta</div>`);
+      otherBanks.forEach(b => {
+        rows.push(makeRow('Konto', formatBank(b), b, true));
+      });
+    }
+
+    if (c.notes) rows.push(makeRow('Notatki', c.notes, c.notes));
+
+    // Combined "all data" copy
+    const allData = buildAllData(c);
+    rows.push(`
+      <div class="actions" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); flex-direction: column;">
+        <button class="btn btn-primary" onclick="copyText(\`${escapeBackticks(allData)}\`, 'Skopiowano wszystkie dane')" style="width:100%;justify-content:center;">
+          Skopiuj wszystkie dane
+        </button>
+      </div>
+    `);
+
+    // KRS link
+    if (c.krs) {
+      rows.push(`
+        <a class="helper-link" href="https://wyszukiwarka-krs.ms.gov.pl/?krs=${c.krs}" target="_blank" rel="noopener">
+          Otwórz w wyszukiwarce KRS →
+        </a>
+      `);
+    } else if (c.nip) {
+      rows.push(`
+        <a class="helper-link" href="https://wyszukiwarka-krs.ms.gov.pl/" target="_blank" rel="noopener">
+          Wyszukaj w KRS →
+        </a>
+      `);
+    }
+
+    rows.push(`
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="openEditModal('${c.id}')">Edytuj</button>
+        <button class="btn btn-danger" onclick="deleteCompany('${c.id}')">Usuń</button>
+      </div>
+    `);
+
+    document.getElementById('detailContent').innerHTML = rows.join('');
+    document.getElementById('detailModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function makeRow(label, display, copyValue, mono = false) {
+    const safeCopy = String(copyValue).replace(/`/g, '\\`').replace(/\$/g, '\\$');
+    return `
+      <div class="detail-row" onclick="copyText(\`${safeCopy}\`, '${label} skopiowane')">
+        <div class="detail-label">${label}</div>
+        <div class="detail-value ${mono ? 'mono' : ''}">${escapeHtml(display)}<span class="copy-hint">Tap aby skopiować</span></div>
+      </div>
+    `;
+  }
+
+  function escapeBackticks(s) {
+    return String(s).replace(/`/g, '\\`').replace(/\$/g, '\\$');
+  }
+
+  function buildAllData(c) {
+    const parts = [];
+    if (c.name) parts.push(c.name);
+    if (c.address) parts.push(c.address);
+    if (c.nip) parts.push('NIP: ' + c.nip);
+    if (c.regon) parts.push('REGON: ' + c.regon);
+    if (c.krs) parts.push('KRS: ' + c.krs);
+    if (c.capital) parts.push('Kapitał zakładowy: ' + c.capital);
+    if (c.bank) parts.push('Konto: ' + formatBank(c.bank));
+    return parts.join('\n');
+  }
+
+  function closeDetailModal() {
+    document.getElementById('detailModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  // ===== Copy to clipboard =====
+  async function copyText(text, msg) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      toast(msg || 'Skopiowano', 'success');
+      // Haptic feedback if available
+      if (navigator.vibrate) navigator.vibrate(10);
+    } catch(e) {
+      toast('Nie udało się skopiować', 'error');
+    }
+  }
+
+  // ===== Search =====
+  document.getElementById('searchInput').addEventListener('input', render);
+
+  // Close modals on backdrop click
+  document.getElementById('formModal').addEventListener('click', e => {
+    if (e.target.id === 'formModal') closeFormModal();
+  });
+  document.getElementById('detailModal').addEventListener('click', e => {
+    if (e.target.id === 'detailModal') closeDetailModal();
+  });
+
+  // ===== Init =====
+  loadCompanies();
+  render();
+</script>
+</body>
+</html>
